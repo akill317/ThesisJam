@@ -119,4 +119,35 @@ public class PlayerMovement : MonoBehaviour {
         iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", MoveTime, "easetype", MoveEaseType, "oncomplete", "MoveSuccess"));
         _itweening = true;
     }
+
+
+
+    /// <summary>
+    /// Below is previous use of code
+    /// </summary>
+    public void moveHeroLeft() {
+        if (!_itweening) {
+            MoveDirection(Vector3.left);
+            _spriteRenderer.flipX = false;
+        }
+    }
+
+    public void moveHeroRight() {
+        if (!_itweening) {
+            MoveDirection(Vector3.right);
+            _spriteRenderer.flipX = true;
+        }
+    }
+
+    public void moveHeroUp() {
+        if (!_itweening) {
+            MoveDirection(Vector3.up);
+        }
+    }
+
+    public void moveHeroDown() {
+        if (!_itweening) {
+            MoveDirection(Vector3.down);
+        }
+    }
 }

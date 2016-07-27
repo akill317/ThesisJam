@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerInputScript : MonoBehaviour {
@@ -8,57 +8,79 @@ public class PlayerInputScript : MonoBehaviour {
     public float inputCoolDown;
     private int playerNum;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
 
-        if (this.gameObject.name == "Player1")
-        {
+        if (this.gameObject.name == "Player1") {
             playerNum = 1;
-        }
-        else
-        {
+        } else {
             playerNum = 2;
         }
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update() {
 
         resetFlagTimer += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space) && resetFlagTimer >= inputCoolDown)
-        {
-            resetFlagTimer = 0;
-            if (TMS.STATE <= 4)
-            {
-                TMS.onBeat(TMS.timeStamp(), playerNum);
-            }
+        //if (Input.GetKeyDown(KeyCode.Space) && resetFlagTimer >= inputCoolDown)
+        //{
+        //    resetFlagTimer = 0;
+        //    if (TMS.STATE <= 4)
+        //    {
+        //        TMS.onBeat(TMS.timeStamp(), playerNum, 9);
+        //    }
+        //}
+
+        if (Input.GetKeyDown(KeyCode.W) && resetFlagTimer >= inputCoolDown) {
+            moveUp();
         }
-
+        if (Input.GetKeyDown(KeyCode.S) && resetFlagTimer >= inputCoolDown) {
+            moveDown();
+        }
+        if (Input.GetKeyDown(KeyCode.A) && resetFlagTimer >= inputCoolDown) {
+            moveLeft();
+        }
+        if (Input.GetKeyDown(KeyCode.D) && resetFlagTimer >= inputCoolDown) {
+            moveRight();
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && resetFlagTimer >= inputCoolDown) {
+            moveAttack();
+        }
     }
 
-    void moveUp ()
-    {
-
+    void moveUp() {
+        resetFlagTimer = 0;
+        if (TMS.STATE <= 4) {
+            TMS.onBeat(TMS.timeStamp(), playerNum, 1);
+        }
     }
 
-    void moveDown()
-    {
-
+    void moveDown() {
+        resetFlagTimer = 0;
+        if (TMS.STATE <= 4) {
+            TMS.onBeat(TMS.timeStamp(), playerNum, 2);
+        }
     }
 
-    void moveLeft ()
-    {
-
+    void moveLeft() {
+        resetFlagTimer = 0;
+        if (TMS.STATE <= 4) {
+            TMS.onBeat(TMS.timeStamp(), playerNum, 3);
+        }
     }
 
-    void moveRight ()
-    {
-
+    void moveRight() {
+        resetFlagTimer = 0;
+        if (TMS.STATE <= 4) {
+            TMS.onBeat(TMS.timeStamp(), playerNum, 4);
+        }
     }
 
-    void moveAttack ()
-    {
-
+    void moveAttack() {
+        resetFlagTimer = 0;
+        if (TMS.STATE <= 4) {
+            TMS.onBeat(TMS.timeStamp(), playerNum, 5);
+        }
     }
 }

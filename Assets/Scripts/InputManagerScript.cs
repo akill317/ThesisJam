@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class InputManagerScript : MonoBehaviour
-{
+public class InputManagerScript : MonoBehaviour {
+    public PlayerMovement Hero1;
+    public PlayerMovement Hero2;
 
     public Queue<int> p1Q = new Queue<int>(4);
     public Queue<int> p2Q = new Queue<int>(4);
@@ -11,14 +12,12 @@ public class InputManagerScript : MonoBehaviour
     private int p1Qcheck;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         //if (Input.GetKeyDown(KeyCode.R) && p1Q.Count >=1 )
         //{
         //    p1Qint = p1Q.Dequeue();
@@ -26,16 +25,28 @@ public class InputManagerScript : MonoBehaviour
         //}
     }
 
-    public void inputIntoMoveQueue(int playerNum, int playerMove)
-    {
-        if (playerNum == 1)
-        {
+    public void inputIntoMoveQueue(int playerNum, int playerMove) {
+        if (playerNum == 1) {
             p1Q.Enqueue(playerMove);
-        }
-
-        else if (playerNum == 2)
-        {
+        } else if (playerNum == 2) {
             p2Q.Enqueue(playerMove);
+        }
+    }
+
+    public void executeMove(int playerNum, int moveNum) {
+        if (playerNum == 1) {
+            if (moveNum == 1) {
+                Hero1.moveHeroUp();
+            }
+            if (moveNum == 2) {
+                Hero1.moveHeroDown();
+            }
+            if (moveNum == 3) {
+                Hero1.moveHeroLeft();
+            }
+            if (moveNum == 4) {
+                Hero1.moveHeroRight();
+            }
         }
     }
 }
