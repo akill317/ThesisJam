@@ -28,3 +28,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+*.pdb
+/NetworkTest_Data
+*.exe
