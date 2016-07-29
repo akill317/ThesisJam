@@ -30,8 +30,15 @@ public class NetworkManager : Photon.MonoBehaviour {
 
     public void OnJoinedRoom() {
         Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room. From here on, your game would be running. For reference, all callbacks are listed in enum: PhotonNetworkingMessage");
-        Transform spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
-        PhotonNetwork.Instantiate("Hero", spawnPoint.position, spawnPoint.rotation, 0);
+        Collider2D col;
+        Transform spawnPoint;
+        do {
+            spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
+            col = Physics2D.OverlapPoint(spawnPoint.position, LayerMask.GetMask(new string[] { "Player" }));
+        } while (col != null);
+
+        GameObject player = PhotonNetwork.Instantiate("Hero", spawnPoint.position, Quaternion.identity, 0);
+        player.GetComponent<PlayerMovement>().SetFacingDirection(spawnPoint.right);
     }
 
     public void OnPhotonCreateRoomFailed() {

@@ -101,13 +101,8 @@ public class PlayerMovement : MonoBehaviour {
         //Create jump path
         Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, transform.position + direction * MoveDistance };
         iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", MoveTime, "easetype", MoveEaseType, "oncomplete", "MoveSuccess"));
-        if (direction.x > 0) {
-            _spriteRenderer.flipX = true;
-        } else if (direction.x < 0) {
-            _spriteRenderer.flipX = false;
-        }
+        SetFacingDirection(direction);
         _itweening = true;
-        _facingDirection = direction;
     }
 
     void MoveSuccess() {
@@ -120,6 +115,17 @@ public class PlayerMovement : MonoBehaviour {
         _itweening = true;
     }
 
+    public void SetFacingDirection(Vector3 direction) {
+        if (_spriteRenderer == null) {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        if (direction.x > 0) {
+            _spriteRenderer.flipX = true;
+        } else if (direction.x < 0) {
+            _spriteRenderer.flipX = false;
+        }
+        _facingDirection = direction;
+    }
 
 
     /// <summary>
