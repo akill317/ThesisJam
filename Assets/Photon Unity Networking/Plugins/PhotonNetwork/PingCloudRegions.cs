@@ -237,7 +237,7 @@ public class PhotonPingManager
     /// if (ipAddress.AddressFamily.ToString().Contains("6")) // ipv6...
     /// </reamrks>
     /// <param name="hostName">Hostname to resolve.</param>
-    /// <returns>IP string or empty string if resolution fails</returns>
+    /// <returns>IP string or empty string if Resolution fails</returns>
     public static string ResolveHost(string hostName)
     {
         string ipv4Address = string.Empty;
