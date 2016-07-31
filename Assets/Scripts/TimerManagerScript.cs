@@ -4,7 +4,8 @@ using System.Collections;
 public class TimerManagerScript : MonoBehaviour {
 
     public SoundManagerScript SMS;
-    public InputManagerScript IMS;
+    //public InputManagerScript IMS;
+    public PlayerMovement PM;
 
     private float SPB;
     public float BPM;
@@ -15,10 +16,10 @@ public class TimerManagerScript : MonoBehaviour {
     private float nextMark;
 
     private float coTimer;
-    private int p1Qint;
+    private int pQint;
 
     // numbers to track beats
-    private int state;
+    public int state;
     public int STATE {
         get {
             return state;
@@ -29,9 +30,10 @@ public class TimerManagerScript : MonoBehaviour {
                 if (state <= 4) {
                     setTimer(Timer.timerOn);
                 } else if (state > 4 && state <= 8) {
-                    p1Qint = IMS.p1Q.Dequeue();
-                    Debug.Log(p1Qint);
-                    IMS.executeMove(1, p1Qint);
+                    //Dequeues based on time, and tells PM to execute the proper move.
+                    pQint = PM.pQ.Dequeue();
+                    PM.dQ(pQint);
+                    Debug.Log(pQint);
                 }
             }
         }
@@ -54,10 +56,16 @@ public class TimerManagerScript : MonoBehaviour {
         }
     }
 
+    void Awake()
+    {
+        SMS = GameObject.Find("SoundManager").GetComponent<SoundManagerScript>();
+    }
+
     // Use this for initialization
     void Start() {
 
         SPB = 60 / BPM;
+        PM.inputCoolDown = SPB * .6f;
         Debug.Log(SPB);
         setTimer(Timer.timerOff);
 
@@ -90,11 +98,8 @@ public class TimerManagerScript : MonoBehaviour {
         coTimer += Time.deltaTime;
         if (coTimer >= timingWindow) {
             // -- If timingWindow's amount of time passes after the beat, it checks to see if the Queue's registered an input.  If it didn't, it inputs a 0.
-            if (IMS.p1Q.Count < STATE) {
-                IMS.inputIntoMoveQueue(1, 0);
-            }
-            if (IMS.p2Q.Count < STATE) {
-                IMS.inputIntoMoveQueue(2, 0);
+            if (PM.pQ.Count < STATE) {
+                PM.nQ(0);
             }
             setTimer(Timer.timerOff);
         }
@@ -110,17 +115,27 @@ public class TimerManagerScript : MonoBehaviour {
         return sceneTimer;
     }
 
-    public bool onBeat(float thisTime, int playerNum, int actionNum) {
+    public bool onBeat(float thisTime, int actionNum) {
         //SMS.Play("blip2");
         if ((nextMark - thisTime) % SPB <= timingWindow / 2) {
+            // Before beat, but in window
             Debug.Log("Case1: (" + nextMark + " - " + thisTime + ") % " + SPB + " = " + (nextMark - thisTime) % SPB);
-            IMS.inputIntoMoveQueue(playerNum, actionNum /*placeholderforinput*/);
+
+            PM.nQ(actionNum);
+
+            //IMS.inputIntoMoveQueue(playerNum, actionNum /*placeholderforinput*/);
             return true;
         } else if ((nextMark - thisTime) % SPB >= SPB - (timingWindow / 2)) {
+            // After beat, but in window
             Debug.Log("Case2: (" + nextMark + " - " + thisTime + ") % " + SPB + " = " + (nextMark - thisTime) % SPB);
-            IMS.inputIntoMoveQueue(playerNum, actionNum /*placeholderforinput*/);
+
+            PM.nQ(actionNum);
+
+            //IMS.inputIntoMoveQueue(playerNum, actionNum /*placeholderforinput*/);
             return true;
+
         } else {
+            // Out of window
             Debug.Log("Fail: (" + nextMark + " - " + thisTime + ") % " + SPB + " = " + (nextMark - thisTime) % SPB);
             //IMS.inputIntoMoveQueue(playerNum, 0 /*placeholderforinput*/);
             return false;

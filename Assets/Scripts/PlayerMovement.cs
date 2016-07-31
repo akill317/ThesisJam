@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -13,6 +14,16 @@ public class PlayerMovement : MonoBehaviour {
     SpriteRenderer _spriteRenderer;
     Vector3 _facingDirection = Vector3.right;
     PhotonView _photonView;
+
+
+    // -- Timer and Queuing
+    public TimerManagerScript TMS;
+    public Queue<int> pQ = new Queue<int>(4);
+    // Anti-Key Spamming Timer
+    public float inputCoolDown; // Set by timer for 60% of SPB
+    private float resetFlagTimer;
+
+
     // Use this for initialization
     void Start() {
         _attackAnimator = transform.FindChild("Attack").GetComponent<Animator>();
@@ -28,48 +39,76 @@ public class PlayerMovement : MonoBehaviour {
             return;
         }
 
+        resetFlagTimer += Time.deltaTime;
+
         //Ensure everyframe can only press one key
         if (!_itweening) {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
-                if (PhotonNetwork.offlineMode) {
-                    MoveDirection(transform.position + Vector3.up * MoveDistance);
-                } else {
-                    _photonView.RPC("MoveDirection",
-                        PhotonTargets.All,
-                        new object[] { transform.position + Vector3.up * MoveDistance });
+
+                resetFlagTimer = 0;
+                if (TMS.STATE <= 4)
+                {
+                    TMS.onBeat(TMS.timeStamp(), 1);
                 }
+                //if (PhotonNetwork.offlineMode) {
+                //    MoveDirection(transform.position + Vector3.up * MoveDistance);
+                //} else {
+                //    _photonView.RPC("MoveDirection",
+                //        PhotonTargets.All,
+                //        new object[] { transform.position + Vector3.up * MoveDistance });
+                //}
             } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-                if (PhotonNetwork.offlineMode) {
-                    MoveDirection(transform.position + Vector3.down * MoveDistance);
-                } else {
-                    _photonView.RPC("MoveDirection",
-                        PhotonTargets.All,
-                        new object[] { transform.position + Vector3.down * MoveDistance });
+                resetFlagTimer = 0;
+                if (TMS.STATE <= 4)
+                {
+                    TMS.onBeat(TMS.timeStamp(), 2);
                 }
+                //if (PhotonNetwork.offlineMode) {
+                //    MoveDirection(transform.position + Vector3.down * MoveDistance);
+                //} else {
+                //    _photonView.RPC("MoveDirection",
+                //        PhotonTargets.All,
+                //        new object[] { transform.position + Vector3.down * MoveDistance });
+                //}
             } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-                if (PhotonNetwork.offlineMode) {
-                    MoveDirection(transform.position + Vector3.left * MoveDistance);
-                } else {
-                    _photonView.RPC("MoveDirection",
-                        PhotonTargets.All,
-                        new object[] { transform.position + Vector3.left * MoveDistance });
+                resetFlagTimer = 0;
+                if (TMS.STATE <= 4)
+                {
+                    TMS.onBeat(TMS.timeStamp(), 3);
                 }
+                //if (PhotonNetwork.offlineMode) {
+                //    MoveDirection(transform.position + Vector3.left * MoveDistance);
+                //} else {
+                //    _photonView.RPC("MoveDirection",
+                //        PhotonTargets.All,
+                //        new object[] { transform.position + Vector3.left * MoveDistance });
+                //}
             } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-                if (PhotonNetwork.offlineMode) {
-                    MoveDirection(transform.position + Vector3.right * MoveDistance);
-                } else {
-                    _photonView.RPC("MoveDirection",
-                        PhotonTargets.All,
-                        new object[] { transform.position + Vector3.right * MoveDistance });
+                resetFlagTimer = 0;
+                if (TMS.STATE <= 4)
+                {
+                    TMS.onBeat(TMS.timeStamp(), 4);
                 }
+                //if (PhotonNetwork.offlineMode) {
+                //    MoveDirection(transform.position + Vector3.right * MoveDistance);
+                //} else {
+                //    _photonView.RPC("MoveDirection",
+                //        PhotonTargets.All,
+                //        new object[] { transform.position + Vector3.right * MoveDistance });
+                //}
             } else if (Input.GetKeyDown(KeyCode.J)) {
-                if (PhotonNetwork.offlineMode) {
-                    CoroutineAttack();
-                } else {
-                    _photonView.RPC("CoroutineAttack",
-                        PhotonTargets.All,
-                        new object[] { });
+                resetFlagTimer = 0;
+                if (TMS.STATE <= 4)
+                {
+                    TMS.onBeat(TMS.timeStamp(), 5);
                 }
+                //if (PhotonNetwork.offlineMode) {
+                //    CoroutineAttack();
+                //} else {
+                //    _photonView.RPC("CoroutineAttack",
+                //        PhotonTargets.All,
+                //        new object[] { });
+                //}
             }
         }
     }
@@ -142,33 +181,131 @@ public class PlayerMovement : MonoBehaviour {
         _facingDirection = direction;
     }
 
+    public void moveHeroLeft()
+    {
+        if (PhotonNetwork.offlineMode)
+        {
+            MoveDirection(transform.position + Vector3.left * MoveDistance);
+        }
+        else
+        {
+            _photonView.RPC("MoveDirection",
+                PhotonTargets.All,
+                new object[] { transform.position + Vector3.left * MoveDistance });
+        }
+    }
+
+    public void moveHeroRight()
+    {
+        //if (PhotonNetwork.offlineMode)
+        //{
+        //    MoveDirection(transform.position + Vector3.right * MoveDistance);
+        //}
+        //else
+        //{
+        //    _photonView.RPC("MoveDirection",
+        //        PhotonTargets.All,
+        //        new object[] { transform.position + Vector3.right * MoveDistance });
+        //}
+    }
+
+    public void moveHeroUp()
+    {
+        //if (PhotonNetwork.offlineMode)
+        //{
+        //    MoveDirection(transform.position + Vector3.up * MoveDistance);
+        //}
+        //else
+        //{
+        //    _photonView.RPC("MoveDirection",
+        //        PhotonTargets.All,
+        //        new object[] { transform.position + Vector3.up * MoveDistance });
+        //}
+    }
+
+    public void moveHeroDown()
+    {
+        //if (PhotonNetwork.offlineMode)
+        //{
+        //    MoveDirection(transform.position + Vector3.down * MoveDistance);
+        //}
+        //else
+        //{
+        //    _photonView.RPC("MoveDirection",
+        //        PhotonTargets.All,
+        //        new object[] { transform.position + Vector3.down * MoveDistance });
+        //}
+    }
+
+    public void moveHeroAttack()
+    {
+        //if (PhotonNetwork.offlineMode)
+        //{
+        //    CoroutineAttack();
+        //}
+        //else
+        //{
+        //    _photonView.RPC("CoroutineAttack",
+        //        PhotonTargets.All,
+        //        new object[] { });
+        //}
+    }
+
+    public void nQ (int playerMove)
+    {
+        pQ.Enqueue(playerMove);
+    }
+
+    public void dQ (int moveNum)
+    {
+        if (moveNum == 1)
+        {
+            moveHeroUp();
+        }
+        if (moveNum == 2)
+        {
+            moveHeroDown();
+        }
+        if (moveNum == 3)
+        {
+            moveHeroLeft();
+        }
+        if (moveNum == 4)
+        {
+            moveHeroRight();
+        }
+        if (moveNum == 5)
+        {
+            moveHeroAttack();
+        }
+    }
 
     /// <summary>
     /// Below is previous use of code
     /// </summary>
-    public void moveHeroLeft() {
-        if (!_itweening) {
-            MoveDirection(Vector3.left);
-            _spriteRenderer.flipX = false;
-        }
-    }
+    //public void moveHeroLeft() {
+    //    if (!_itweening) {
+    //        MoveDirection(Vector3.left);
+    //        _spriteRenderer.flipX = false;
+    //    }
+    //}
 
-    public void moveHeroRight() {
-        if (!_itweening) {
-            MoveDirection(Vector3.right);
-            _spriteRenderer.flipX = true;
-        }
-    }
+    //public void moveHeroRight() {
+    //    if (!_itweening) {
+    //        MoveDirection(Vector3.right);
+    //        _spriteRenderer.flipX = true;
+    //    }
+    //}
 
-    public void moveHeroUp() {
-        if (!_itweening) {
-            MoveDirection(Vector3.up);
-        }
-    }
+    //public void moveHeroUp() {
+    //    if (!_itweening) {
+    //        MoveDirection(Vector3.up);
+    //    }
+    //}
 
-    public void moveHeroDown() {
-        if (!_itweening) {
-            MoveDirection(Vector3.down);
-        }
-    }
+    //public void moveHeroDown() {
+    //    if (!_itweening) {
+    //        MoveDirection(Vector3.down);
+    //    }
+    //}
 }
