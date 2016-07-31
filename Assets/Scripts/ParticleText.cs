@@ -47,6 +47,7 @@ public class ParticleText : MonoBehaviour {
     void CreatePoints() {
         _currentResolution = Resolution;
         _points = new ParticlePoint[Resolution];
+        PoolManager.Pools["ParticlePool"].DespawnAll();
         for (int i = 0; i < _points.Length; i++) {
             Vector2 cordinate = _textCoordinateList[Random.Range(0, _textCoordinateList.Count)];
             _points[i] = PoolManager.Pools["ParticlePool"].Spawn("point").GetComponent<ParticlePoint>();

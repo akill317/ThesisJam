@@ -99,7 +99,7 @@ public class PlayerMovement : MonoBehaviour {
             return;
         }
         //Create jump path
-        Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, transform.position + direction * MoveDistance };
+        Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, tile.transform.position - _spriteCenterOffset };
         iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", MoveTime, "easetype", MoveEaseType, "oncomplete", "MoveSuccess"));
         SetFacingDirection(direction);
         _itweening = true;
