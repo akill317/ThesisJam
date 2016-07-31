@@ -32,35 +32,35 @@ public class PlayerMovement : MonoBehaviour {
         if (!_itweening) {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
                 if (PhotonNetwork.offlineMode) {
-                    MoveDirection(Vector3.up);
+                    MoveDirection(transform.position + Vector3.up * MoveDistance);
                 } else {
                     _photonView.RPC("MoveDirection",
                         PhotonTargets.All,
-                        new object[] { Vector3.up });
+                        new object[] { transform.position + Vector3.up * MoveDistance });
                 }
             } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
                 if (PhotonNetwork.offlineMode) {
-                    MoveDirection(Vector3.down);
+                    MoveDirection(transform.position + Vector3.down * MoveDistance);
                 } else {
                     _photonView.RPC("MoveDirection",
                         PhotonTargets.All,
-                        new object[] { Vector3.down });
+                        new object[] { transform.position + Vector3.down * MoveDistance });
                 }
             } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
                 if (PhotonNetwork.offlineMode) {
-                    MoveDirection(Vector3.left);
+                    MoveDirection(transform.position + Vector3.left * MoveDistance);
                 } else {
                     _photonView.RPC("MoveDirection",
                         PhotonTargets.All,
-                        new object[] { Vector3.left });
+                        new object[] { transform.position + Vector3.left * MoveDistance });
                 }
             } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
                 if (PhotonNetwork.offlineMode) {
-                    MoveDirection(Vector3.right);
+                    MoveDirection(transform.position + Vector3.right * MoveDistance);
                 } else {
                     _photonView.RPC("MoveDirection",
                         PhotonTargets.All,
-                        new object[] { Vector3.right });
+                        new object[] { transform.position + Vector3.right * MoveDistance });
                 }
             } else if (Input.GetKeyDown(KeyCode.J)) {
                 if (PhotonNetwork.offlineMode) {
@@ -105,15 +105,16 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     [PunRPC]
-    void MoveDirection(Vector3 direction) {
+    void MoveDirection(Vector3 targetPosition) {
+        Vector3 direction = targetPosition - transform.position;
         //Check whether there is a tile at the direciton that we are moving
-        Collider2D tile = Physics2D.OverlapPoint(transform.position + direction * MoveDistance + _spriteCenterOffset);
+        Collider2D tile = Physics2D.OverlapPoint(targetPosition + _spriteCenterOffset);
         if (tile == null) {
             MoveFailed(direction);
             return;
         }
         //Create jump path
-        Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, tile.transform.position - _spriteCenterOffset };
+        Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, targetPosition };
         iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", MoveTime, "easetype", MoveEaseType, "oncomplete", "MoveSuccess"));
         SetFacingDirection(direction);
         _itweening = true;
