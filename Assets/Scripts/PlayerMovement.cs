@@ -81,24 +81,24 @@ public class PlayerMovement : MonoBehaviour {
 
     [PunRPC]
     void Defeat() {
-    	Debug.Log("You lost");
+        Debug.Log("You lost");
     }
 
     void Victory() {
-    	Debug.Log("You win!!");
+        Debug.Log("You win!!");
     }
 
     IEnumerator Attack() {
-    	AttackCheck checker = _attackAnimator.GetComponent<AttackCheck>();
+        AttackCheck checker = _attackAnimator.GetComponent<AttackCheck>();
         _itweening = true;
         _attackAnimator.transform.position = transform.position + _facingDirection * MoveDistance + _spriteCenterOffset * Mathf.Abs(_facingDirection.y);
         _attackAnimator.transform.rotation = Quaternion.FromToRotation(Vector3.right, _facingDirection);
         _attackAnimator.Play("attack");
         while (_attackAnimator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
-        	if(checker.hittingOpponent) {
-        		_photonView.RPC("Defeat", PhotonTargets.Others, new object[] {});
-        		Victory();
-        	}
+            if (checker.hittingOpponent) {
+                _photonView.RPC("Defeat", PhotonTargets.Others, new object[] { });
+                Victory();
+            }
             yield return null;
         }
         _itweening = false;
@@ -108,7 +108,7 @@ public class PlayerMovement : MonoBehaviour {
     void MoveDirection(Vector3 targetPosition) {
         Vector3 direction = targetPosition - transform.position;
         //Check whether there is a tile at the direciton that we are moving
-        Collider2D tile = Physics2D.OverlapPoint(targetPosition + _spriteCenterOffset);
+        Collider2D tile = Physics2D.OverlapPoint(targetPosition + _spriteCenterOffset, LayerMask.GetMask(new string[] { "Tile" }));
         if (tile == null) {
             MoveFailed(direction);
             return;
