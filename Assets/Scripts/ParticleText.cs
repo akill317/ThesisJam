@@ -15,6 +15,9 @@ public class ParticleText : MonoBehaviour {
     ParticlePoint[] _points;
     public Gradient Colors;
 
+    [Range(0, 0.05f)]
+    public float TextSize;
+
     public float[] EaseTimes;
     public EaseType[] EaseTypes;
     // Use this for initialization
@@ -50,7 +53,7 @@ public class ParticleText : MonoBehaviour {
         for (int i = 0; i < _points.Length; i++) {
             Vector2 cordinate = _textCoordinateList[Random.Range(0, _textCoordinateList.Count)];
             _points[i] = PoolManager.Pools["ParticlePool"].Spawn("point").GetComponent<ParticlePoint>();
-            _points[i].OriginPosition = new Vector3(cordinate.x / 50.0f, cordinate.y / 50.0f, 0f);
+            _points[i].OriginPosition = _points[i].transform.parent.position + new Vector3(cordinate.x * TextSize, cordinate.y * TextSize, 0f);
             _points[i].transform.position = Random.insideUnitCircle * 20;
             _points[i].SetColor(Colors.Evaluate(Random.value));
             _textCoordinateList.Remove(cordinate);
