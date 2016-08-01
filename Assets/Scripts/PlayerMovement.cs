@@ -33,122 +33,107 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
-        if (!_photonView.isMine) {
+        if (!_photonView.isMine)
+        {
             return;
         }
 
         resetFlagTimer += Time.deltaTime;
 
         //Ensure everyframe can only press one key
-<<<<<<<
-        if (!_itweening) {
-            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && resetFlagTimer >= inputCoolDown) {
+        if (!_itweening)
+        {
 
-=======
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
-            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
->>>>>>>
-                resetFlagTimer = 0;
-                if (PhotonNetwork.offlineMode) {
-                    nQ(1);
-                } else {
-                    _photonView.RPC("nQ",
-                        PhotonTargets.All,
-                        new object[] { 1 });
+            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && resetFlagTimer >= inputCoolDown)
+            {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
+                {
+
+                    resetFlagTimer = 0;
+                    if (PhotonNetwork.offlineMode)
+                    {
+                        nQ(1);
+                    }
+                    else
+                    {
+                        _photonView.RPC("nQ",
+                            PhotonTargets.All,
+                            new object[] { 1 });
+                    }
                 }
-<<<<<<<
-                //if (PhotonNetwork.offlineMode) {
-                //    MoveDirection(transform.position + Vector3.up * MoveDistance);
-                //} else {
-                //    _photonView.RPC("MoveDirection",
-                //        PhotonTargets.All,
-                //        new object[] { transform.position + Vector3.up * MoveDistance });
-                //}
-            } else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && resetFlagTimer >= inputCoolDown) {
-=======
             }
-        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
->>>>>>>
-                resetFlagTimer = 0;
-                if (PhotonNetwork.offlineMode) {
-                    nQ(2);
-                } else {
-                    _photonView.RPC("nQ",
-                        PhotonTargets.All,
-                        new object[] { 2 });
+            else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && resetFlagTimer >= inputCoolDown)
+            {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
+                {
+                    resetFlagTimer = 0;
+                    if (PhotonNetwork.offlineMode)
+                    {
+                        nQ(2);
+                    }
+                    else
+                    {
+                        _photonView.RPC("nQ",
+                            PhotonTargets.All,
+                            new object[] { 2 });
+                    }
                 }
-<<<<<<<
-                //if (PhotonNetwork.offlineMode) {
-                //    MoveDirection(transform.position + Vector3.down * MoveDistance);
-                //} else {
-                //    _photonView.RPC("MoveDirection",
-                //        PhotonTargets.All,
-                //        new object[] { transform.position + Vector3.down * MoveDistance });
-                //}
-            } else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && resetFlagTimer >= inputCoolDown) {
-=======
             }
-        } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
->>>>>>>
-                resetFlagTimer = 0;
-                if (PhotonNetwork.offlineMode) {
-                    nQ(3);
-                } else {
-                    _photonView.RPC("nQ",
-                        PhotonTargets.All,
-                        new object[] { 3 });
+            else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && resetFlagTimer >= inputCoolDown)
+            {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
+                {
+                    resetFlagTimer = 0;
+                    if (PhotonNetwork.offlineMode)
+                    {
+                        nQ(3);
+                    }
+                    else
+                    {
+                        _photonView.RPC("nQ",
+                            PhotonTargets.All,
+                            new object[] { 3 });
+                    }
                 }
-<<<<<<<
-                //if (PhotonNetwork.offlineMode) {
-                //    MoveDirection(transform.position + Vector3.left * MoveDistance);
-                //} else {
-                //    _photonView.RPC("MoveDirection",
-                //        PhotonTargets.All,
-                //        new object[] { transform.position + Vector3.left * MoveDistance });
-                //}
-            } else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && resetFlagTimer >= inputCoolDown) {
-=======
             }
-        } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
->>>>>>>
-                resetFlagTimer = 0;
-                if (PhotonNetwork.offlineMode) {
-                    nQ(4);
-                } else {
-                    _photonView.RPC("nQ",
-                        PhotonTargets.All,
-                        new object[] { 4 });
+            else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && resetFlagTimer >= inputCoolDown)
+            {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
+                {
+                    resetFlagTimer = 0;
+                    if (PhotonNetwork.offlineMode)
+                    {
+                        nQ(4);
+                    }
+                    else
+                    {
+                        _photonView.RPC("nQ",
+                            PhotonTargets.All,
+                            new object[] { 4 });
+                    }
                 }
-<<<<<<<
-                //if (PhotonNetwork.offlineMode) {
-                //    MoveDirection(transform.position + Vector3.right * MoveDistance);
-                //} else {
-                //    _photonView.RPC("MoveDirection",
-                //        PhotonTargets.All,
-                //        new object[] { transform.position + Vector3.right * MoveDistance });
-                //}
-            } else if ((Input.GetKeyDown(KeyCode.J)) && resetFlagTimer >= inputCoolDown) {
-=======
             }
-        } else if (Input.GetKeyDown(KeyCode.J)) {
-            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
->>>>>>>
-                resetFlagTimer = 0;
-                if (PhotonNetwork.offlineMode) {
-                    nQ(5);
-                } else {
-                    _photonView.RPC("nQ",
-                        PhotonTargets.All,
-                        new object[] { 5 });
+            else if ((Input.GetKeyDown(KeyCode.J)) && resetFlagTimer >= inputCoolDown)
+            {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
+                {
+                    resetFlagTimer = 0;
+                    if (PhotonNetwork.offlineMode)
+                    {
+                        nQ(5);
+                    }
+                    else
+                    {
+                        _photonView.RPC("nQ",
+                            PhotonTargets.All,
+                            new object[] { 5 });
+                    }
                 }
             }
         }
-
     }
 
     [PunRPC]
@@ -223,7 +208,6 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 
-<<<<<<<
     public void moveHeroRight()
     {
         if (PhotonNetwork.offlineMode)
@@ -280,12 +264,8 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    public void nQ (int playerMove)
-    {
-=======
     [PunRPC]
     public void nQ(int playerMove) {
->>>>>>>
         pQ.Enqueue(playerMove);
     }
 

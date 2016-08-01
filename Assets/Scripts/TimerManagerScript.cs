@@ -27,6 +27,11 @@ public class TimerManagerScript : MonoBehaviour {
         set {
             if (value != state) {
                 state = value;
+                if (value == 9)
+                {
+                    PM.pQ.Clear();
+                }
+
                 if (state <= 4) {
                     setTimer(Timer.timerOn);
                 } else if (state > 4 && state <= 8) {
