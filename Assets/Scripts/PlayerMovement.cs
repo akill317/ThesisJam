@@ -42,14 +42,23 @@ public class PlayerMovement : MonoBehaviour {
         resetFlagTimer += Time.deltaTime;
 
         //Ensure everyframe can only press one key
+<<<<<<<
         if (!_itweening) {
             if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && resetFlagTimer >= inputCoolDown) {
 
+=======
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
+>>>>>>>
                 resetFlagTimer = 0;
-                if (TMS.STATE <= 4)
-                {
-                    TMS.onBeat(TMS.timeStamp(), 1);
+                if (PhotonNetwork.offlineMode) {
+                    nQ(1);
+                } else {
+                    _photonView.RPC("nQ",
+                        PhotonTargets.All,
+                        new object[] { 1 });
                 }
+<<<<<<<
                 //if (PhotonNetwork.offlineMode) {
                 //    MoveDirection(transform.position + Vector3.up * MoveDistance);
                 //} else {
@@ -58,11 +67,20 @@ public class PlayerMovement : MonoBehaviour {
                 //        new object[] { transform.position + Vector3.up * MoveDistance });
                 //}
             } else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && resetFlagTimer >= inputCoolDown) {
+=======
+            }
+        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
+>>>>>>>
                 resetFlagTimer = 0;
-                if (TMS.STATE <= 4)
-                {
-                    TMS.onBeat(TMS.timeStamp(), 2);
+                if (PhotonNetwork.offlineMode) {
+                    nQ(2);
+                } else {
+                    _photonView.RPC("nQ",
+                        PhotonTargets.All,
+                        new object[] { 2 });
                 }
+<<<<<<<
                 //if (PhotonNetwork.offlineMode) {
                 //    MoveDirection(transform.position + Vector3.down * MoveDistance);
                 //} else {
@@ -71,11 +89,20 @@ public class PlayerMovement : MonoBehaviour {
                 //        new object[] { transform.position + Vector3.down * MoveDistance });
                 //}
             } else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && resetFlagTimer >= inputCoolDown) {
+=======
+            }
+        } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
+>>>>>>>
                 resetFlagTimer = 0;
-                if (TMS.STATE <= 4)
-                {
-                    TMS.onBeat(TMS.timeStamp(), 3);
+                if (PhotonNetwork.offlineMode) {
+                    nQ(3);
+                } else {
+                    _photonView.RPC("nQ",
+                        PhotonTargets.All,
+                        new object[] { 3 });
                 }
+<<<<<<<
                 //if (PhotonNetwork.offlineMode) {
                 //    MoveDirection(transform.position + Vector3.left * MoveDistance);
                 //} else {
@@ -84,11 +111,20 @@ public class PlayerMovement : MonoBehaviour {
                 //        new object[] { transform.position + Vector3.left * MoveDistance });
                 //}
             } else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && resetFlagTimer >= inputCoolDown) {
+=======
+            }
+        } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
+>>>>>>>
                 resetFlagTimer = 0;
-                if (TMS.STATE <= 4)
-                {
-                    TMS.onBeat(TMS.timeStamp(), 4);
+                if (PhotonNetwork.offlineMode) {
+                    nQ(4);
+                } else {
+                    _photonView.RPC("nQ",
+                        PhotonTargets.All,
+                        new object[] { 4 });
                 }
+<<<<<<<
                 //if (PhotonNetwork.offlineMode) {
                 //    MoveDirection(transform.position + Vector3.right * MoveDistance);
                 //} else {
@@ -97,25 +133,29 @@ public class PlayerMovement : MonoBehaviour {
                 //        new object[] { transform.position + Vector3.right * MoveDistance });
                 //}
             } else if ((Input.GetKeyDown(KeyCode.J)) && resetFlagTimer >= inputCoolDown) {
+=======
+            }
+        } else if (Input.GetKeyDown(KeyCode.J)) {
+            if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
+>>>>>>>
                 resetFlagTimer = 0;
-                if (TMS.STATE <= 4)
-                {
-                    TMS.onBeat(TMS.timeStamp(), 5);
+                if (PhotonNetwork.offlineMode) {
+                    nQ(5);
+                } else {
+                    _photonView.RPC("nQ",
+                        PhotonTargets.All,
+                        new object[] { 5 });
                 }
-                //if (PhotonNetwork.offlineMode) {
-                //    CoroutineAttack();
-                //} else {
-                //    _photonView.RPC("CoroutineAttack",
-                //        PhotonTargets.All,
-                //        new object[] { });
-                //}
             }
         }
+
     }
 
     [PunRPC]
     void CoroutineAttack() {
-        StartCoroutine("Attack");
+        if (!_itweening) {
+            StartCoroutine(Attack());
+        }
     }
 
     [PunRPC]
@@ -143,20 +183,21 @@ public class PlayerMovement : MonoBehaviour {
         _itweening = false;
     }
 
-    [PunRPC]
     void MoveDirection(Vector3 targetPosition) {
-        Vector3 direction = targetPosition - transform.position;
-        //Check whether there is a tile at the direciton that we are moving
-        Collider2D tile = Physics2D.OverlapPoint(targetPosition + _spriteCenterOffset, LayerMask.GetMask(new string[] { "Tile" }));
-        if (tile == null) {
-            MoveFailed(direction);
-            return;
+        if (!_itweening) {
+            Vector3 direction = targetPosition - transform.position;
+            //Check whether there is a tile at the direciton that we are moving
+            Collider2D tile = Physics2D.OverlapPoint(targetPosition + _spriteCenterOffset, LayerMask.GetMask(new string[] { "Tile" }));
+            if (tile == null) {
+                MoveFailed(direction);
+                return;
+            }
+            //Create jump path
+            Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, targetPosition };
+            iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", MoveTime, "easetype", MoveEaseType, "oncomplete", "MoveSuccess"));
+            SetFacingDirection(direction);
+            _itweening = true;
         }
-        //Create jump path
-        Vector3[] path = new Vector3[] { transform.position, transform.position + new Vector3(direction.x * 0.5f, direction.y + 0.3f) * MoveDistance, targetPosition };
-        iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", MoveTime, "easetype", MoveEaseType, "oncomplete", "MoveSuccess"));
-        SetFacingDirection(direction);
-        _itweening = true;
     }
 
     void MoveSuccess() {
@@ -181,20 +222,8 @@ public class PlayerMovement : MonoBehaviour {
         _facingDirection = direction;
     }
 
-    public void moveHeroLeft()
-    {
-        if (PhotonNetwork.offlineMode)
-        {
-            MoveDirection(transform.position + Vector3.left * MoveDistance);
-        }
-        else
-        {
-            _photonView.RPC("MoveDirection",
-                PhotonTargets.All,
-                new object[] { transform.position + Vector3.left * MoveDistance });
-        }
-    }
 
+<<<<<<<
     public void moveHeroRight()
     {
         if (PhotonNetwork.offlineMode)
@@ -253,59 +282,29 @@ public class PlayerMovement : MonoBehaviour {
 
     public void nQ (int playerMove)
     {
+=======
+    [PunRPC]
+    public void nQ(int playerMove) {
+>>>>>>>
         pQ.Enqueue(playerMove);
     }
 
-    public void dQ (int moveNum)
-    {
-        if (moveNum == 1)
-        {
-            moveHeroUp();
+    public void dQ(int moveNum) {
+        if (moveNum == 1) {
+            MoveDirection(transform.position + Vector3.up * MoveDistance);
         }
-        if (moveNum == 2)
-        {
-            moveHeroDown();
+        if (moveNum == 2) {
+            MoveDirection(transform.position + Vector3.down * MoveDistance);
         }
-        if (moveNum == 3)
-        {
-            moveHeroLeft();
+        if (moveNum == 3) {
+            MoveDirection(transform.position + Vector3.left * MoveDistance);
         }
-        if (moveNum == 4)
-        {
-            moveHeroRight();
+        if (moveNum == 4) {
+            MoveDirection(transform.position + Vector3.right * MoveDistance);
         }
-        if (moveNum == 5)
-        {
-            moveHeroAttack();
+        if (moveNum == 5) {
+            CoroutineAttack();
         }
     }
 
-    /// <summary>
-    /// Below is previous use of code
-    /// </summary>
-    //public void moveHeroLeft() {
-    //    if (!_itweening) {
-    //        MoveDirection(Vector3.left);
-    //        _spriteRenderer.flipX = false;
-    //    }
-    //}
-
-    //public void moveHeroRight() {
-    //    if (!_itweening) {
-    //        MoveDirection(Vector3.right);
-    //        _spriteRenderer.flipX = true;
-    //    }
-    //}
-
-    //public void moveHeroUp() {
-    //    if (!_itweening) {
-    //        MoveDirection(Vector3.up);
-    //    }
-    //}
-
-    //public void moveHeroDown() {
-    //    if (!_itweening) {
-    //        MoveDirection(Vector3.down);
-    //    }
-    //}
 }

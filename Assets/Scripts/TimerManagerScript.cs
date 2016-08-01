@@ -115,13 +115,13 @@ public class TimerManagerScript : MonoBehaviour {
         return sceneTimer;
     }
 
-    public bool onBeat(float thisTime, int actionNum) {
+    public bool onBeat(float thisTime) {
         //SMS.Play("blip2");
         if ((nextMark - thisTime) % SPB <= timingWindow / 2) {
             // Before beat, but in window
             Debug.Log("Case1: (" + nextMark + " - " + thisTime + ") % " + SPB + " = " + (nextMark - thisTime) % SPB);
 
-            PM.nQ(actionNum);
+            //PM.nQ(actionNum);
 
             //IMS.inputIntoMoveQueue(playerNum, actionNum /*placeholderforinput*/);
             return true;
@@ -129,7 +129,7 @@ public class TimerManagerScript : MonoBehaviour {
             // After beat, but in window
             Debug.Log("Case2: (" + nextMark + " - " + thisTime + ") % " + SPB + " = " + (nextMark - thisTime) % SPB);
 
-            PM.nQ(actionNum);
+            //PM.nQ(actionNum);
 
             //IMS.inputIntoMoveQueue(playerNum, actionNum /*placeholderforinput*/);
             return true;
