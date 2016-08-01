@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using PathologicalGames;
 
 public class ParticleText : MonoBehaviour {
+    
+    public Sprite DisplayImage;
 
-    public Sprite VictoryTextImage;
-    public Sprite DefeatTextImage;
-    public Sprite DrawTextImage;
     List<Vector2> _textCoordinateList = new List<Vector2>();
 
     [Range(300, 500)]
@@ -20,7 +19,7 @@ public class ParticleText : MonoBehaviour {
     public EaseType[] EaseTypes;
     // Use this for initialization
     void Start() {
-        ReadTextCoordinateFromImage(VictoryTextImage);
+        ReadTextCoordinateFromImage(DisplayImage);
 
     }
 
