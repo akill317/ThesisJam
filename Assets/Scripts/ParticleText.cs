@@ -60,7 +60,7 @@ public class ParticleText : MonoBehaviour {
 
     void SetOffAllParticlePoints() {
         for (int i = 0; i < _points.Length; i++) {
-            Vector2 cordinate = _textCoordinateList[Random.Range(0, _textCoordinateList.Count)];
+            //Vector2 cordinate = _textCoordinateList[Random.Range(0, _textCoordinateList.Count)];
             _points[i].SetOffParticle(EaseTimes[Random.Range(0, EaseTimes.Length)], EaseTypes[Random.Range(0, EaseTypes.Length)]);
         }
     }
