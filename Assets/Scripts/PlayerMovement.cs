@@ -30,103 +30,79 @@ public class PlayerMovement : MonoBehaviour {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _photonView = GetComponent<PhotonView>();
         _spriteCenterOffset = Vector3.down * 0.5f;
+        if(transform.rotation.eulerAngles.y == 0) {
+            transform.rotation = Quaternion.identity;
+            SetFacingDirection(Vector3.right);
+        }else {
+            transform.rotation = Quaternion.identity;
+            SetFacingDirection(Vector3.left);
+        }
+        ChangeHeroColor();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
-        if (!_photonView.isMine)
-        {
+        if (!_photonView.isMine) {
             return;
         }
 
         resetFlagTimer += Time.deltaTime;
 
         //Ensure everyframe can only press one key
-        if (!_itweening)
-        {
+        if (!_itweening) {
 
-            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && resetFlagTimer >= inputCoolDown)
-            {
-                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
-                {
+            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && resetFlagTimer >= inputCoolDown) {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
 
                     resetFlagTimer = 0;
-                    if (PhotonNetwork.offlineMode)
-                    {
+                    if (PhotonNetwork.offlineMode) {
                         nQ(1);
-                    }
-                    else
-                    {
+                    } else {
                         _photonView.RPC("nQ",
                             PhotonTargets.All,
                             new object[] { 1 });
                     }
                 }
-            }
-            else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && resetFlagTimer >= inputCoolDown)
-            {
-                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
-                {
+            } else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && resetFlagTimer >= inputCoolDown) {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
                     resetFlagTimer = 0;
-                    if (PhotonNetwork.offlineMode)
-                    {
+                    if (PhotonNetwork.offlineMode) {
                         nQ(2);
-                    }
-                    else
-                    {
+                    } else {
                         _photonView.RPC("nQ",
                             PhotonTargets.All,
                             new object[] { 2 });
                     }
                 }
-            }
-            else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && resetFlagTimer >= inputCoolDown)
-            {
-                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
-                {
+            } else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && resetFlagTimer >= inputCoolDown) {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
                     resetFlagTimer = 0;
-                    if (PhotonNetwork.offlineMode)
-                    {
+                    if (PhotonNetwork.offlineMode) {
                         nQ(3);
-                    }
-                    else
-                    {
+                    } else {
                         _photonView.RPC("nQ",
                             PhotonTargets.All,
                             new object[] { 3 });
                     }
                 }
-            }
-            else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && resetFlagTimer >= inputCoolDown)
-            {
-                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
-                {
+            } else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && resetFlagTimer >= inputCoolDown) {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
                     resetFlagTimer = 0;
-                    if (PhotonNetwork.offlineMode)
-                    {
+                    if (PhotonNetwork.offlineMode) {
                         nQ(4);
-                    }
-                    else
-                    {
+                    } else {
                         _photonView.RPC("nQ",
                             PhotonTargets.All,
                             new object[] { 4 });
                     }
                 }
-            }
-            else if ((Input.GetKeyDown(KeyCode.J)) && resetFlagTimer >= inputCoolDown)
-            {
-                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp()))
-                {
+            } else if ((Input.GetKeyDown(KeyCode.J)) && resetFlagTimer >= inputCoolDown) {
+                if (TMS.STATE <= 4 && TMS.onBeat(TMS.timeStamp())) {
                     resetFlagTimer = 0;
-                    if (PhotonNetwork.offlineMode)
-                    {
+                    if (PhotonNetwork.offlineMode) {
                         nQ(5);
-                    }
-                    else
-                    {
+                    } else {
                         _photonView.RPC("nQ",
                             PhotonTargets.All,
                             new object[] { 5 });
@@ -210,56 +186,40 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 
-    public void moveHeroRight()
-    {
-        if (PhotonNetwork.offlineMode)
-        {
+    public void moveHeroRight() {
+        if (PhotonNetwork.offlineMode) {
             MoveDirection(transform.position + Vector3.right * MoveDistance);
-        }
-        else
-        {
+        } else {
             _photonView.RPC("MoveDirection",
                 PhotonTargets.All,
                 new object[] { transform.position + Vector3.right * MoveDistance });
         }
     }
 
-    public void moveHeroUp()
-    {
-        if (PhotonNetwork.offlineMode)
-        {
+    public void moveHeroUp() {
+        if (PhotonNetwork.offlineMode) {
             MoveDirection(transform.position + Vector3.up * MoveDistance);
-        }
-        else
-        {
+        } else {
             _photonView.RPC("MoveDirection",
                 PhotonTargets.All,
                 new object[] { transform.position + Vector3.up * MoveDistance });
         }
     }
 
-    public void moveHeroDown()
-    {
-        if (PhotonNetwork.offlineMode)
-        {
+    public void moveHeroDown() {
+        if (PhotonNetwork.offlineMode) {
             MoveDirection(transform.position + Vector3.down * MoveDistance);
-        }
-        else
-        {
+        } else {
             _photonView.RPC("MoveDirection",
                 PhotonTargets.All,
                 new object[] { transform.position + Vector3.down * MoveDistance });
         }
     }
 
-    public void moveHeroAttack()
-    {
-        if (PhotonNetwork.offlineMode)
-        {
+    public void moveHeroAttack() {
+        if (PhotonNetwork.offlineMode) {
             CoroutineAttack();
-        }
-        else
-        {
+        } else {
             _photonView.RPC("CoroutineAttack",
                 PhotonTargets.All,
                 new object[] { });
@@ -289,4 +249,46 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
+    public void ChangeHeroColor() {
+        if (_photonView == null) {
+            _photonView = GetComponent<PhotonView>();
+        }
+        if (_photonView.isMine) {
+            if (PhotonNetwork.offlineMode) {
+                PhotonChangeHeroColor(GameManager.Instance.PlayerColor);
+            } else {
+                _photonView.RPC("PhotonChangeHeroColor", PhotonTargets.All, new object[] { GameManager.Instance.PlayerColor });
+            }
+        }
+    }
+
+    [PunRPC]
+    void PhotonChangeHeroColor(int colorIndex) {
+        if (_spriteRenderer == null) {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        _spriteRenderer.color = IndexToColor(colorIndex);
+    }
+
+    public static Color IndexToColor(int colorIndex) {
+        Color color = Color.white;
+        switch (colorIndex) {
+            case 0:
+                color = Color.white;
+                break;
+            case 1:
+                color = new Color(1, 0.3f, 0.3f);
+                break;
+            case 2:
+                color = new Color(0.1f, 0.4f, 1);
+                break;
+            case 3:
+                color = new Color(0.1f, 1, 0.3f);
+                break;
+            case 4:
+                color = new Color(1, 0.95f, 0.2f);
+                break;
+        }
+        return color;
+    }
 }

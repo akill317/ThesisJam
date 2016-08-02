@@ -61,14 +61,8 @@ public class TimerManagerScript : MonoBehaviour {
         }
     }
 
-    void Awake()
-    {
-        SMS = GameObject.Find("SoundManager").GetComponent<SoundManagerScript>();
-    }
-
     // Use this for initialization
     void Start() {
-
         SPB = 60 / BPM;
         PM.inputCoolDown = SPB * .6f;
         Debug.Log(SPB);
@@ -78,6 +72,9 @@ public class TimerManagerScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if(SMS == null) {
+            SMS = GameObject.Find("SoundManager").GetComponent<SoundManagerScript>();
+        }
 
         sceneTimer += Time.deltaTime;
 
