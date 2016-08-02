@@ -158,8 +158,10 @@ public class PlayerMovement : MonoBehaviour {
         _attackAnimator.transform.position = transform.position + _facingDirection * MoveDistance + _spriteCenterOffset * Mathf.Abs(_facingDirection.y);
         _attackAnimator.transform.rotation = Quaternion.FromToRotation(Vector3.right, _facingDirection);
         _attackAnimator.Play("attack");
-        while (_attackAnimator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
-            if (checker.hittingOpponent) {
+        float t = 0;
+        while(t < _attackAnimator.GetCurrentAnimatorStateInfo(0).length) {
+        	t += Time.deltaTime;
+			if (checker.hittingOpponent) {
                 _photonView.RPC("Defeat", PhotonTargets.Others, new object[] { });
                 Victory();
             }
